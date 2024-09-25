@@ -73,8 +73,8 @@ public:
     void draw() {
         shader.Use();
 
-        glUniform1f(glGetUniformLocation(shader.Program, "x_mov"), x);
-        glUniform1f(glGetUniformLocation(shader.Program, "y_mov"), y);
+        glUniform1f(glGetUniformLocation(shader.Program, "x_mov_full"), x);
+        glUniform1f(glGetUniformLocation(shader.Program, "y_mov_full"), y);
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

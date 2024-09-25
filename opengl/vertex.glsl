@@ -17,4 +17,7 @@ gl_Position = vec4(position.x + x_mov, position.y + y_mov, position.z, 1.0);
 ourColor = color;
 TexCoord = texCoord;
 //ourPosition = position;
+
+gl_Position.x = gl_Position.x;
+gl_Position.y = gl_Position.y;
 }

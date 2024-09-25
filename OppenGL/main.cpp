@@ -64,7 +64,7 @@ int main() {
     );
 
     Character player( 
-        0.0f, 0.0f, 0.2f, 0.55f, 1.0f,
+        0.0f, 1.0f, 0.2f, 0.55f, 1.0f,
         "vertex.glsl", "fragment.glsl",
         "texture/brickwall.jpg",
         "texture/brickwall_normal.jpg",
@@ -99,6 +99,7 @@ int main() {
         player.processInput(window, deltaTime);
         player.draw(mixValue);
 
+        std::cout << "Main loop - Player position: (" << player.getX() << ", " << player.getY() << ")" << std::endl;
 
 
         glfwSwapBuffers(window);

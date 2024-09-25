@@ -24,6 +24,11 @@ private:
     Shader shader;
     Collide& obj;
 
+    float verticalVelocity;
+    const float gravity = -90.8f; // Gravity constant
+    const float groundLevel = -1.1f; // Y-coordinate of the ground
+    bool isOnGround;
+
     unsigned int loadTexture(const char* path) {
         unsigned int textureID;
         glGenTextures(1, &textureID);
@@ -54,7 +59,7 @@ public:
         const char* texturePath1, const char* texturePath2,
         Collide& collideObj)
         : x(startX), y(startY), width(characterWidth), height(characterHeight), speed(moveSpeed),
-        shader(vertexPath, fragmentPath), obj(collideObj) {
+        shader(vertexPath, fragmentPath), obj(collideObj), verticalVelocity(1.0f), isOnGround(true) {
         setupMesh();
         texture1 = loadTexture(texturePath1);
         texture2 = loadTexture(texturePath2);
@@ -107,16 +112,45 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
     }
-    void move(float dx, float dy) {
+
+    float getX() const { return x; }
+    float getY() const { return y; }
+
+    void move(float dx, float dy, float deltaTime) {
         float newX = x + dx;
         float newY = y + dy;
 
-        // Check for collision with the object
-        if (isColliding(newX, newY)) {
-            return;
+        if (!isOnGround) {
+            verticalVelocity += gravity * deltaTime;
         }
-        x = newX;
-        y = newY;
+
+        newY += verticalVelocity * deltaTime;
+
+        if (newY <= groundLevel) {
+            newY = groundLevel;
+            isOnGround = true;
+            verticalVelocity = 0;
+        }
+        else {
+            isOnGround = false;
+        }
+
+        if (!isColliding(newX, newY)) {
+            x = newX;
+            y = newY;
+        }
+
+        // Добавим отладочный вывод
+        std::cout << "Position: (" << x << ", " << y << "), Velocity: " << verticalVelocity << ", OnGround: " << isOnGround << std::endl;
+    }
+
+
+    void jump() {
+        if (isOnGround) {
+            std::cout << "Jumping!" << std::endl;
+            verticalVelocity = 500.0f;  // Уменьшил силу прыжка для более реалистичного поведения
+            isOnGround = false;
+        }
     }
 
     void draw(float mixValue) {
@@ -130,8 +164,8 @@ public:
         shader.setInt("ourTexture2", 1);
 
         glUniform1f(glGetUniformLocation(shader.Program, "mixValue"), mixValue);
-        glUniform1f(glGetUniformLocation(shader.Program, "x_mov"), x);
         glUniform1f(glGetUniformLocation(shader.Program, "y_mov"), y);
+        glUniform1f(glGetUniformLocation(shader.Program, "x_mov"), x);
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -140,13 +174,19 @@ public:
 
     void processInput(GLFWwindow* window, float deltaTime) {
         float movement = speed * deltaTime;
+        float dx = 0, dy = 0;
+
         if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-            move(-movement, 0);
+            dx -= movement;
         }
         if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-            move(movement, 0);
+            dx += movement;
         }
-        move(0, -movement);
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+            jump();
+        }
+
+        move(dx, dy, deltaTime);
     }
 
     ~Character() {

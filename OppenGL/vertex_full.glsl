@@ -5,15 +5,15 @@ layout (location = 2) in vec2 texCoord;
 out vec3 ourColor;
 out vec2 TexCoord;
 
-uniform float x_mov;
-uniform float y_mov;
+uniform float x_mov_full;
+uniform float y_mov_full;
 
 //out vec3 ourPosition;
 
 
 void main()
 {
-gl_Position = vec4(position.x + x_mov, position.y + y_mov, position.z, 1.0);
+gl_Position = vec4(position.x + x_mov_full, position.y + y_mov_full, position.z, 1.0);
 ourColor = color;
 TexCoord = texCoord;
 //ourPosition = position;
