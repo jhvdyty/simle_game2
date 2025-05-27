@@ -81,8 +81,5 @@ Edit
 ./simle_game2
 You may need to adjust include/library paths based on your platform.
 
-Screenshots
-Add gameplay screenshots here if available.
-
 License
 This project is open-source. Use it for learning or experimentation. Attribution is appreciated but not required.
