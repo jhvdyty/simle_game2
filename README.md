@@ -1,4 +1,4 @@
-simle_game2
+ simle_game2
 A simple 2D OpenGL-based game prototype written in C++. This project features basic character movement, textured rendering with normal mapping, and collision with a ground platform using modern OpenGL (3.3 Core Profile), GLFW, and GLAD.
 
 Features
