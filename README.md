@@ -59,7 +59,7 @@ Clone the repo
 bash
 Copy
 Edit
-git clone https://github.com/yourusername/simle_game2.git
+git clone https://github.com/jhvdyty/simle_game2.git
 cd simle_game2
 Install dependencies (if not installed)
 
